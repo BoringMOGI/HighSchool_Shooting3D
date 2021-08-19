@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static bool isStopController;            // 플레이어의 조작을 멈추는가?
+
     [Header("Movement")]
     public CharacterController controller;          // 캐릭터 컨트롤러.
     public float moveSpeed;                         // 이동 속도.
@@ -56,11 +58,12 @@ public class PlayerController : MonoBehaviour
     {
         CheckGround();
 
-
-        Movement();
-        Jump();
-        WeaponControl();
-
+        if (isStopController != true)
+        {
+            Movement();
+            Jump();
+            WeaponControl();
+        }
 
         Gravity();
     }

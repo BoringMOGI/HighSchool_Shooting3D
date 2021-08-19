@@ -32,6 +32,14 @@ public class WeaponController : MonoBehaviour
         stateInfoUi.SetBulletText(ammoCount, 150);
     }
 
+    float hp = 100f;
+    float maxHp = 100f;
+    private void Update()
+    {
+        hp -= Time.deltaTime;
+        stateInfoUi.SetHpImage(hp, maxHp);
+    }
+
     public void Fire()
     {
         if (nextAttackTime <= Time.time && ammoCount > 0 && isReloading == false)
@@ -42,7 +50,7 @@ public class WeaponController : MonoBehaviour
             ammoCount -= 1;
             nextAttackTime = Time.time + attackRate;
 
-            Time.timeScale = 0.2f;
+            // Time.timeScale = 0.2f;
 
             Bullet bullet = Instantiate(bulletPrefab, muzzlePivot.position, muzzlePivot.rotation);
             stateInfoUi.SetBulletText(ammoCount, 150);

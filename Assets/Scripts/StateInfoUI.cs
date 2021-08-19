@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class StateInfoUI : MonoBehaviour
 {
+    public Image hpImage;                   // 체력 이미지.
     public Text currnetBulletText;          // 현재 장탄 수.
     public Text remainingBulletText;        // 남은 탄약의 수.
 
-    
+    public void SetHpImage(float current, float max)
+    {
+        hpImage.fillAmount = current / max;
+    }
     public void SetBulletText(int currnet, int remaining)
     {
         currnetBulletText.text = currnet.ToString();

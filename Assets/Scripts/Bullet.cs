@@ -10,13 +10,19 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Contact : " + collision.gameObject.name);
-
         if (collision.gameObject.tag == "Normal")
         {
             // ÅºÈç ¸¸µé±â.
             Instantiate(bulletHolePrefab, transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
+        }
+        else if(collision.gameObject.tag == "Target")
+        {
+            Target target = collision.gameObject.GetComponent<Target>();
+            if(target != null)
+            {
+                target.TargetOut();
+            }
         }
 
         Destroy(gameObject);
