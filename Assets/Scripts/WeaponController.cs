@@ -17,7 +17,10 @@ public class WeaponController : MonoBehaviour
 
     [Header("Bullet")]
     public Transform muzzlePivot;   // 총구의 위치.
-    public Bullet bulletPrefab; // 총알 프리팹.
+    public Bullet bulletPrefab;     // 총알 프리팹.
+
+    [Header("UI")]
+    public StateInfoUI stateInfoUi;
                                     
     int ammoCount;                  // 남은 탄약 개수.
     float nextAttackTime;           // 발사 가능 시간.
@@ -26,6 +29,7 @@ public class WeaponController : MonoBehaviour
     private void Start()
     {
         ammoCount = maxAmmoCount;
+        stateInfoUi.SetBulletText(ammoCount, 150);
     }
 
     public void Fire()
@@ -38,19 +42,29 @@ public class WeaponController : MonoBehaviour
             ammoCount -= 1;
             nextAttackTime = Time.time + attackRate;
 
-            Bullet bullet = Instantiate(bulletPrefab, muzzlePivot.position, muzzlePivot.rotation);
+            Time.timeScale = 0.2f;
 
-            Vector3 direction = bullet.transform.forward;
+            Bullet bullet = Instantiate(bulletPrefab, muzzlePivot.position, muzzlePivot.rotation);
+            stateInfoUi.SetBulletText(ammoCount, 150);
+
+            Vector3 bulletDirection = bullet.transform.forward;
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-                direction = hit.point - bullet.transform.position;
+            if(Physics.Raycast(ray, out hit))
+            {
+                bulletDirection = hit.point - muzzlePivot.position; // 총알이 나아가야할 방향 수정.
+            }
 
-            bullet.Shoot(direction, bulletSpeed);
+            bullet.Shoot(bulletDirection, bulletSpeed);             // 해당 방향으로 총알을 쏜다.
 
+
+            /*
             float reboundX = Random.Range(-0.5f, 0.6f) * (anim.GetBool("isAim") ? 0.5f : 1.0f);
             float reboundY = 0.94f * (anim.GetBool("isAim") ? 0.5f : 1.0f);
             mouseLook.Rebound(reboundX, reboundY);
+            */
+
+
         }                
     }
 
@@ -63,13 +77,23 @@ public class WeaponController : MonoBehaviour
         reloadSE.Play();
 
         anim.SetTrigger("onReload");
-
-
     }
 
     private void OnEndReload()
     {
         isReloading = false;
         ammoCount = maxAmmoCount;
+        stateInfoUi.SetBulletText(ammoCount, 150);
+    }
+
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 100f);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(muzzlePivot.position, muzzlePivot.forward * 100f);
+
     }
 }

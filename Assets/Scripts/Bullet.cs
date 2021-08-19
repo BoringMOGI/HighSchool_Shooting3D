@@ -24,9 +24,7 @@ public class Bullet : MonoBehaviour
 
     public void Shoot(Vector3 direction, float bulletSpeed)
     {
-        Debug.Log("Shoot");
         rigid = GetComponent<Rigidbody>();
         rigid.velocity = direction * bulletSpeed;
     }
-    
 }
