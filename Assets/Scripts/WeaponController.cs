@@ -18,6 +18,7 @@ public class WeaponController : MonoBehaviour
     [Header("Bullet")]
     public Transform muzzlePivot;   // 총구의 위치.
     public Bullet bulletPrefab;     // 총알 프리팹.
+    public LayerMask contactLayer;  // 충돌 되는 레이어.
 
     [Header("UI")]
     public StateInfoUI stateInfoUi;
@@ -58,7 +59,7 @@ public class WeaponController : MonoBehaviour
             Vector3 bulletDirection = bullet.transform.forward;
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
             RaycastHit hit;
-            if(Physics.Raycast(ray, out hit))
+            if(Physics.Raycast(ray, out hit, 1000f, contactLayer))
             {
                 bulletDirection = hit.point - muzzlePivot.position; // 총알이 나아가야할 방향 수정.
             }

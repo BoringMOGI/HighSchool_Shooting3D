@@ -5,11 +5,15 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    public GameMode gameMode;
+
     [Header("Target")]
-    public Transform targetParent;      // 타겟의 부모 오브젝트.
-    public float targetAppearRate;      // 적이 등장하는 주기.
-    public float targetStandTime;       // 타겟이 서있는 시간.
-    public int maxTargetCount;          // 등장하는 타겟의 개수.
+    public Transform targetParent;      // 타겟의 부모 오브젝트.    
+    public Transform minMovePosition;   // 최소로 이동할 수 있는 위치.
+    public Transform maxMovePssition;   // 최대로 이동할 수 있는 위치.
+    public int appearTargetCount;       // 등장하는 적의 개수.
+    public int minTargetCount;          // 최소 등장 개수.
+    public int maxTargetCount;          // 최대 등장 개수.
 
     [Header("UI")]
     public StateInfoUI stateInfoUi;     // 상태 UI.
@@ -17,17 +21,19 @@ public class GameManager : MonoBehaviour
     public float maxCountDown;          // 총 카운트 다운 시간.
     private float countDown;            // 카운트 다운 시간.
 
-    [Header("Evenets")]
-    public UnityEvent<int, int> OnUpdateScore;
+    //[Header("Evenets")]
+    //public UnityEvent<int, int> OnUpdateScore;
 
     Target[] allTarget;                 // 모든 타겟 오브젝트 배열.
     float nextTargetTime;               // 다음으로 적이 등장하는 시간.
 
-    int targetCount;                    // 등장하는 적의 개수.
+    int remainingTarget;                // 남은 적의 개수.
     int outTargetCount;                 // 퇴장한 적의 개수.
     int score;                          // 점수.
 
     bool isPlaying;                     // 게임이 진행중인가?
+
+    GameMode.TargetInfo targetInfo;     // 적의 정보.
 
     void Start()
     {
@@ -38,10 +44,10 @@ public class GameManager : MonoBehaviour
             target.OnTargetHit += OnHitTarget;
             target.OnTargetOut += OnOutTarget;
         }
-               
-        OnUpdateScore?.Invoke(0, 0);
-    }
 
+        stateInfoUi.SetGameModeText(gameMode.gameMode);
+        stateInfoUi.SetScoreText(appearTargetCount, 0);        
+    }
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.P))
@@ -68,17 +74,17 @@ public class GameManager : MonoBehaviour
 
         // 게임 시작.
         PlayerController.isStopController = false;
-        nextTargetTime = Time.time + targetAppearRate;
+        nextTargetTime = Time.time + targetInfo.appearRate;
 
         // 적의 등장.
-        while (targetCount > 0)
+        while (remainingTarget > 0)
         {
             OnUpdateTarget();
             yield return null;
         }
 
         // 적이 다 나갔는지 체크.
-        while (outTargetCount < maxTargetCount)
+        while (outTargetCount < appearTargetCount)
             yield return null;
 
         OnEndGame();
@@ -87,50 +93,73 @@ public class GameManager : MonoBehaviour
     void InitGame()
     {
         score = 0;
-        targetCount = maxTargetCount;
+        remainingTarget = appearTargetCount;
         outTargetCount = 0;
 
         PlayerController.isStopController = true;
         countDown = maxCountDown;
 
-        OnUpdateScore?.Invoke(targetCount, score);
+        stateInfoUi.SetScoreText(remainingTarget, score);
     }
-    void OnStartGame()
+    public void OnStartGame()
     {
         if (isPlaying == true)
             return;
 
         isPlaying = true;
+        targetInfo = gameMode.GetTargetInfo();
         StartCoroutine(GameUpdate());
     }
-    void OnEndGame()
+    private void OnEndGame()
     {
         isPlaying = false;
         Debug.Log("게임 종료");
+
+        stateInfoUi.SetScoreText(appearTargetCount, score);
+    }
+
+    public void OnChangeMode()
+    {
+        if (isPlaying == true)
+            return;
+
+        gameMode.gameMode += 1; // 모드 증가.
+        if (gameMode.gameMode == GameMode.MODE.Count)
+            gameMode.gameMode = 0;
+
+        stateInfoUi.SetGameModeText(gameMode.gameMode);
+    }
+    public void OnChangeTargetCount(bool isAdd)
+    {
+        if (isPlaying == true)
+            return;
+
+        appearTargetCount = Mathf.Clamp(appearTargetCount + (isAdd ? 1 : -1), minTargetCount, maxTargetCount);
+        stateInfoUi.SetScoreText(appearTargetCount, score);
     }
 
     void OnUpdateTarget()
     {
         // 랜덤한 타겟을 등장시킨다.
-        if(nextTargetTime <= Time.time && targetCount > 0)
+        if(nextTargetTime <= Time.time && remainingTarget > 0)
         {
             int targetIndex = Random.Range(0, allTarget.Length);
             Target target = allTarget[targetIndex];
             if(target.IsAppear == false)
             {
-                target.OnStand(targetStandTime);        // 적의 등장.
-                targetCount -= 1;                        // 적은 남은 개수 감소.
-                OnUpdateScore?.Invoke(targetCount, score);
+                target.OnStand(targetInfo, minMovePosition.position, maxMovePssition.position);   // 적의 등장.
+
+                remainingTarget -= 1;                                          // 적은 남은 개수 감소.
+                stateInfoUi.SetScoreText(remainingTarget, score);
             }
 
-            nextTargetTime = Time.time + targetAppearRate;
+            nextTargetTime = Time.time + targetInfo.appearRate;
         }
     }
     void OnHitTarget()
     {
         score += 1;
-
-        OnUpdateScore?.Invoke(targetCount, score);
+        stateInfoUi.SetScoreText(remainingTarget, score);
     }
     void OnOutTarget()
     {

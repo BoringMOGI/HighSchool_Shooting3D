@@ -79,6 +79,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 842814881875227658}
   collider: {fileID: 1929449152}
+  minPosition: {fileID: 0}
+  maxPosition: {fileID: 0}
+  moveSpeed: 2
 --- !u!1001 &1568165722625543653
 PrefabInstance:
   m_ObjectHideFlags: 0

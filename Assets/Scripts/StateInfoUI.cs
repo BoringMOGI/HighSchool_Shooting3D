@@ -11,6 +11,7 @@ public class StateInfoUI : MonoBehaviour
     public Text remainingBulletText;        // 남은 탄약의 수.
 
     [Header("Score")]
+    public Text gameModeText;
     public Text enemyText;
     public Text scoreText;
 
@@ -24,6 +25,10 @@ public class StateInfoUI : MonoBehaviour
         remainingBulletText.text = remaining.ToString();
     }
 
+    public void SetGameModeText(GameMode.MODE mode)
+    {
+        gameModeText.text = string.Format("게임모드 : {0}", mode);
+    }
     public void SetScoreText(int enemyCount, int score)
     {
         enemyText.text = enemyCount.ToString();
