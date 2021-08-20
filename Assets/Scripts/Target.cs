@@ -13,6 +13,9 @@ public class Target : MonoBehaviour
     float standTime;                    // 서 있는 시간.
     bool isCheckStandTime;              // 서 있는 시간을 체크하는가?
 
+    public event System.Action OnTargetHit; // 이벤트형 델리게이트.
+    public event System.Action OnTargetOut; // 타겟이 퇴장했다.
+
     private void Start()
     {
         //collider.enabled = false;       // 최초에는 콜리더가 꺼져있다.
@@ -44,8 +47,13 @@ public class Target : MonoBehaviour
         isCheckStandTime = true;                // 이때부터 서있는 시간 체크.
     }
 
-
-    public void TargetOut()
+    public void TargetHit()
+    {
+        // 점수 증가.
+        OnTargetHit?.Invoke();          // 등록된 이벤트 호출.
+        TargetOut();
+    }
+    private void TargetOut()
     {
         anim.Play("Target_Out");        // 쓰러지는 애니메이션 재생.
         collider.enabled = false;       // 타겟이 쓰러지는 순간 콜리더는 끈다. (중복 호출 방지)
@@ -54,6 +62,7 @@ public class Target : MonoBehaviour
     public void OnEndTargetOut()
     {
         isAppear = false;                // 쓰러지는 애니메이션이 종료되어야 isAppear가 false가 된다.
+        OnTargetOut?.Invoke();
     }    
 
 

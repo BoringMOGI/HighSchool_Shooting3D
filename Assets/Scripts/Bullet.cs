@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
             Target target = collision.gameObject.GetComponent<Target>();
             if(target != null)
             {
-                target.TargetOut();
+                target.TargetHit();
             }
         }
 
