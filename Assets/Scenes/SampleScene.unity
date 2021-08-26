@@ -1190,6 +1190,8 @@ MonoBehaviour:
   contactLayer:
     serializedVersion: 2
     m_Bits: 247
+  throwPivot: {fileID: 955687523}
+  grenadePrefab: {fileID: 100000, guid: 769ce5ae38a9e85458d672ac28752435, type: 3}
   stateInfoUi: {fileID: 1486962837}
 --- !u!82 &516031182
 AudioSource:
@@ -1616,14 +1618,17 @@ MonoBehaviour:
     moveSpeed: 3
     appearRate: 2
     standTime: 3
+    targetHp: 2
   - mode: 1
     moveSpeed: 5
     appearRate: 1.5
     standTime: 1.5
+    targetHp: 3
   - mode: 2
     moveSpeed: 8
     appearRate: 1
     standTime: 1.5
+    targetHp: 4
 --- !u!4 &557371098
 Transform:
   m_ObjectHideFlags: 0
@@ -2269,6 +2274,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925857060}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &955687522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 955687523}
+  m_Layer: 7
+  m_Name: ThrowPoint_L
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &955687523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955687522}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.031, y: 0.084, z: 0.007}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1188835219}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -2582,13 +2617,9 @@ PrefabInstance:
       value: Target
       objectReference: {fileID: 0}
     - target: {fileID: 4536451297090011957, guid: 1f3ffc5b0a8733940ac448526d784356, type: 3}
-      propertyPath: maxPosition
+      propertyPath: collider
       value: 
-      objectReference: {fileID: 394257776}
-    - target: {fileID: 4536451297090011957, guid: 1f3ffc5b0a8733940ac448526d784356, type: 3}
-      propertyPath: minPosition
-      value: 
-      objectReference: {fileID: 304780137}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f3ffc5b0a8733940ac448526d784356, type: 3}
 --- !u!4 &1007406797 stripped
@@ -2675,6 +2706,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063390047}
   m_CullTransparentMesh: 1
+--- !u!4 &1188835219 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400034, guid: 182b7f11db452bc458d35a6c9eced06f, type: 3}
+  m_PrefabInstance: {fileID: 476509051}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1207568392
 GameObject:
   m_ObjectHideFlags: 0

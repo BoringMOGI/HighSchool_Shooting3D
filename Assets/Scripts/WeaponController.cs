@@ -20,12 +20,19 @@ public class WeaponController : MonoBehaviour
     public Bullet bulletPrefab;     // 총알 프리팹.
     public LayerMask contactLayer;  // 충돌 되는 레이어.
 
+    [Header("Grenade")]
+    public Transform throwPivot;
+    public GameObject grenadePrefab;
+
     [Header("UI")]
     public StateInfoUI stateInfoUi;
                                     
     int ammoCount;                  // 남은 탄약 개수.
     float nextAttackTime;           // 발사 가능 시간.
+
+    bool isAnimating;               // 애니메이션을 재생 중인가?
     bool isReloading;               // 재장전 중인가?
+    bool isThrowing;                // 폭탄을 던지는 중인가?
 
     private void Start()
     {
@@ -77,20 +84,42 @@ public class WeaponController : MonoBehaviour
         }                
     }
 
+    public void GrenadeThrow()
+    {
+        if (isThrowing || isAnimating)
+            return;
+
+        isThrowing = true;
+        isAnimating = true;
+
+        anim.SetTrigger("onThrow");
+    }
+    public void OnThrow()
+    {
+        GameObject grenade = Instantiate(grenadePrefab, throwPivot.position, throwPivot.rotation);
+
+    }
+    public void OnEndThrow()
+    {
+        isThrowing = false;
+        isAnimating = false;
+    }
+
     public void Reload()
     {
-        if (isReloading)
+        if (isReloading || isAnimating)
             return;
 
         isReloading = true;
+        isAnimating = true;
         reloadSE.Play();
 
         anim.SetTrigger("onReload");
     }
-
     private void OnEndReload()
     {
         isReloading = false;
+        isAnimating = false;
         ammoCount = maxAmmoCount;
         stateInfoUi.SetBulletText(ammoCount, 150);
     }

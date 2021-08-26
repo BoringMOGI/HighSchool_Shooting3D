@@ -16,12 +16,12 @@ public class Bullet : MonoBehaviour
             Instantiate(bulletHolePrefab, transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
         }
-        else if(collision.gameObject.tag == "Target")
+        else if (collision.gameObject.tag == "HitBox")
         {
-            Target target = collision.gameObject.GetComponent<Target>();
-            if(target != null)
+            Hitbox hitBox = collision.gameObject.GetComponent<Hitbox>();
+            if (hitBox != null)
             {
-                target.TargetHit();
+                hitBox.Hit();
             }
         }
 

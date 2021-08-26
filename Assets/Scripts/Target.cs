@@ -5,7 +5,6 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     public Animation anim;
-    public Collider collider;
     
     private bool isAppear;              // 등장 했는가?
     public bool IsAppear => isAppear;   // 외부 공개 (읽기 전용)
@@ -21,6 +20,8 @@ public class Target : MonoBehaviour
     Vector3 minPosition;                // 최소 거리.
     Vector3 maxPosition;                // 최대 거리.
     Vector3 destination;                // 목적지.
+
+    int hp;                             // 타겟의 체력.
 
     private void Start()
     {
@@ -48,8 +49,6 @@ public class Target : MonoBehaviour
         }
     }
 
-    
-
     public void OnStand(GameMode.TargetInfo info, Vector3 minPosition, Vector3 maxPosition)
     {
         anim.Play("Target_In");        
@@ -59,6 +58,7 @@ public class Target : MonoBehaviour
         this.moveSpeed = info.moveSpeed;
         this.minPosition = minPosition;
         this.maxPosition = maxPosition;
+        hp = info.targetHp;
 
         isMoveRight = Random.Range(0.0f, 1.0f) < 0.5f;          // 50% 확률로 true or false.
         destination = isMoveRight ? maxPosition : minPosition;  // 목적지 설정.
@@ -67,21 +67,33 @@ public class Target : MonoBehaviour
     }
     public void OnEndStand()
     {
-        collider.enabled = true;
         standTime = standTime + Time.time;      // Time.time(현재 시간) + 유지 시간.
         isCheckStandTime = true;                // 이때부터 서있는 시간 체크.
     }
 
-    public void TargetHit()
+    public void TargetHit(Hitbox.BODY_SITE site)
     {
-        // 점수 증가.
-        OnTargetHit?.Invoke();          // 등록된 이벤트 호출.
-        TargetOut();
+        int damage = 0;
+        if (site == Hitbox.BODY_SITE.Head)
+        {
+            damage = 100;
+        }
+        else if(site == Hitbox.BODY_SITE.Body)
+        {
+            damage = 1;
+        }
+
+        hp -= damage;
+        if (hp <= 0)
+        {
+            // 점수 증가.
+            OnTargetHit?.Invoke();          // 등록된 이벤트 호출.
+            TargetOut();
+        }
     }
     private void TargetOut()
     {
         anim.Play("Target_Out");        // 쓰러지는 애니메이션 재생.
-        collider.enabled = false;       // 타겟이 쓰러지는 순간 콜리더는 끈다. (중복 호출 방지)
         isCheckStandTime = false;       // 쓰러지는 중이라 서있는 시간 체크를 허용하지 않음.
     }
     public void OnEndTargetOut()

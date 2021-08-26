@@ -20,6 +20,7 @@ public class GameMode : MonoBehaviour
         public float moveSpeed;     // 이동 속도.
         public float appearRate;    // 등장 주기.
         public float standTime;     // 서있는 시간.
+        public int targetHp;        // 타겟의 체력.
     }
 
     public MODE gameMode;

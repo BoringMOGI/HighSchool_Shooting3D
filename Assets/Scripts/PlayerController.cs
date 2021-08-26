@@ -149,6 +149,11 @@ public class PlayerController : MonoBehaviour
         {
             mainGun.Reload();
         }
+
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            mainGun.GrenadeThrow();
+        }
     }
 
     private void OnDrawGizmosSelected()
