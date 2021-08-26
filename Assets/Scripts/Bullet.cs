@@ -5,12 +5,14 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public Transform bulletHolePrefab;
+    public LayerMask groundLayer;
 
     Rigidbody rigid;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Normal")
+        // 충돌한 충돌체가 Grond Layer를 가지고 있을 경우.
+        if ((groundLayer & 1 << collision.gameObject.layer) != 0)
         {
             // 탄흔 만들기.
             Instantiate(bulletHolePrefab, transform.position,

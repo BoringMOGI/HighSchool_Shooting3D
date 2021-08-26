@@ -22,13 +22,18 @@ public class WeaponController : MonoBehaviour
 
     [Header("Grenade")]
     public Transform throwPivot;
-    public GameObject grenadePrefab;
+    public Grenade grenadePrefab;
+    public float throwForce;
+
+    [Header("Melee")]
+    public ColliderChecker meleeChecker;
 
     [Header("UI")]
     public StateInfoUI stateInfoUi;
                                     
     int ammoCount;                  // 남은 탄약 개수.
     float nextAttackTime;           // 발사 가능 시간.
+    float nextMeleeTime;            // 근접 공격 가능 시간.
 
     bool isAnimating;               // 애니메이션을 재생 중인가?
     bool isReloading;               // 재장전 중인가?
@@ -37,7 +42,9 @@ public class WeaponController : MonoBehaviour
     private void Start()
     {
         ammoCount = maxAmmoCount;
-        stateInfoUi.SetBulletText(ammoCount, 150);
+
+        if(stateInfoUi != null)
+            stateInfoUi.SetBulletText(ammoCount, 150);
     }
 
     float hp = 100f;
@@ -45,7 +52,8 @@ public class WeaponController : MonoBehaviour
     private void Update()
     {
         hp -= Time.deltaTime;
-        stateInfoUi.SetHpImage(hp, maxHp);
+        if (stateInfoUi != null)
+            stateInfoUi.SetHpImage(hp, maxHp);
     }
 
     public void Fire()
@@ -96,13 +104,34 @@ public class WeaponController : MonoBehaviour
     }
     public void OnThrow()
     {
-        GameObject grenade = Instantiate(grenadePrefab, throwPivot.position, throwPivot.rotation);
-
+        Grenade grenade = Instantiate(grenadePrefab, throwPivot.position, throwPivot.rotation);
+        grenade.Throw(transform.forward, throwForce);
     }
     public void OnEndThrow()
     {
         isThrowing = false;
         isAnimating = false;
+    }
+
+    public void MeleeAttack()
+    {
+        if (nextMeleeTime <= Time.time)
+        {
+            nextMeleeTime = Time.time + 1.5f;
+            anim.SetTrigger("onMelee");            
+        }
+    }
+    private void OnMeleeAttack()
+    {
+        Collider[] colliders = meleeChecker.Check();
+        foreach (Collider collider in colliders)
+        {
+            Hitbox hitBox = collider.GetComponent<Hitbox>();
+            if (hitBox != null)
+            {
+                hitBox.Hit();
+            }
+        }
     }
 
     public void Reload()

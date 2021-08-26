@@ -150,6 +150,11 @@ public class PlayerController : MonoBehaviour
             mainGun.Reload();
         }
 
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            mainGun.MeleeAttack();
+        }
+
         if(Input.GetKeyDown(KeyCode.G))
         {
             mainGun.GrenadeThrow();

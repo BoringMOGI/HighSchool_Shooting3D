@@ -91,7 +91,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19d437ef61de42b4ea95b69ca1276171, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletHolePrefab: {fileID: 32729650980832417, guid: 1eb5cf6c015027c469f90ff9772cf85a, type: 3}
+  bulletHolePrefab: {fileID: 32729650980832417, guid: 1eb5cf6c015027c469f90ff9772cf85a,
+    type: 3}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1001 &1913222149380641220
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -151,6 +155,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: e3e3b2d021fa80a488a48fcd984ef279, type: 3}
 --- !u!4 &1913222149380246340 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: e3e3b2d021fa80a488a48fcd984ef279, type: 3}
+  m_CorrespondingSourceObject: {fileID: 400000, guid: e3e3b2d021fa80a488a48fcd984ef279,
+    type: 3}
   m_PrefabInstance: {fileID: 1913222149380641220}
   m_PrefabAsset: {fileID: 0}

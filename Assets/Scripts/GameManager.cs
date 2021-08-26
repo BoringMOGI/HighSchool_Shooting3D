@@ -164,6 +164,5 @@ public class GameManager : MonoBehaviour
     void OnOutTarget()
     {
         outTargetCount += 1;
-        Debug.Log("ÀûÀÇ ÅğÀå");
     }
 }
