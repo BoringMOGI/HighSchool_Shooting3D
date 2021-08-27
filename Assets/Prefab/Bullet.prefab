@@ -95,7 +95,7 @@ MonoBehaviour:
     type: 3}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 2560
 --- !u!1001 &1913222149380641220
 PrefabInstance:
   m_ObjectHideFlags: 0

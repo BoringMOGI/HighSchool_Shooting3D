@@ -128,4 +128,4 @@ MonoBehaviour:
   rigid: {fileID: 3974862920704441733}
   explsionEffect: {fileID: 8939584265139111445, guid: 0fb3ab3ead956c04c8ae0c7679529b46,
     type: 3}
-  explodeRadius: 4
+  explodeRadius: 11

@@ -15,10 +15,11 @@ public class Bullet : MonoBehaviour
         if ((groundLayer & 1 << collision.gameObject.layer) != 0)
         {
             // ÅºÈç ¸¸µé±â.
-            Instantiate(bulletHolePrefab, transform.position,
+            Transform bulletHole = Instantiate(bulletHolePrefab, transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
+            bulletHole.SetParent(collision.transform);
         }
-        else if (collision.gameObject.tag == "HitBox")
+        if (collision.gameObject.tag == "HitBox")
         {
             Hitbox hitBox = collision.gameObject.GetComponent<Hitbox>();
             if (hitBox != null)

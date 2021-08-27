@@ -71,6 +71,7 @@ public class WeaponController : MonoBehaviour
             Bullet bullet = Instantiate(bulletPrefab, muzzlePivot.position, muzzlePivot.rotation);
             stateInfoUi.SetBulletText(ammoCount, 150);
 
+
             Vector3 bulletDirection = bullet.transform.forward;
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
             RaycastHit hit;

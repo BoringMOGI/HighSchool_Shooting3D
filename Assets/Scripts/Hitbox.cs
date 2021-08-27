@@ -12,7 +12,7 @@ public class Hitbox : MonoBehaviour
         Body,
     }
 
-    [SerializeField] Target receiver;
+    [SerializeField] BasicTarget receiver;
     [SerializeField] BODY_SITE bodySite;
 
     Collider hitCollider;
@@ -24,6 +24,10 @@ public class Hitbox : MonoBehaviour
     public void Hit()
     {
         receiver.TargetHit(bodySite);
+    }
+    public void ExplodHit()
+    {
+        receiver.TakeExplode();
     }
 
 }

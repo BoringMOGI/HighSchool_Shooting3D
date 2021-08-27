@@ -26,11 +26,10 @@ public class Grenade : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, explodeRadius);
         foreach (Collider collider in colliders)
         {
-            Debug.Log(collider.gameObject.name);
-            Target target = collider.GetComponent<Target>();
-            if(target != null)
+            Hitbox hitBox = collider.GetComponent<Hitbox>();
+            if(hitBox != null)
             {
-                target.TakeExplode();
+                hitBox.ExplodHit();
             }
         }
 
